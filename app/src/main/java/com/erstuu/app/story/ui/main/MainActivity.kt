@@ -3,6 +3,7 @@ package com.erstuu.app.story.ui.main
 import android.content.Intent
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -79,7 +80,6 @@ class MainActivity : AppCompatActivity() {
     private fun setupRecyclerView() {
         storyAdapter = StoryAdapter()
         binding.rvStories.layoutManager = LinearLayoutManager(this)
-        binding.rvStories.adapter = storyAdapter
     }
 
     private fun getStories() {
@@ -98,5 +98,9 @@ class MainActivity : AppCompatActivity() {
         binding.fab.setOnClickListener {
             startActivity(Intent(this, CreateStoryActivity::class.java))
         }
+    }
+
+    companion object {
+        val TAG = MainActivity::class.java.simpleName
     }
 }

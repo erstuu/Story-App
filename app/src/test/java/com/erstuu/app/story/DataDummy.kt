@@ -11,6 +11,8 @@ object DataDummy {
                 i.toString(),
                 "author + $i",
                 "quote $i",
+                "name $i",
+                "description $i",
             )
             items.add(quote)
         }

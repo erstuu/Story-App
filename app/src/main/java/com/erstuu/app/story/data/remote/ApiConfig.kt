@@ -1,6 +1,9 @@
 package com.erstuu.app.story.data.remote
 
 import com.erstuu.app.story.BuildConfig
+import com.erstuu.app.story.data.local.preference.UserPreference
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -10,12 +13,16 @@ import retrofit2.converter.gson.GsonConverterFactory
 object ApiConfig {
     private const val BASE_URL: String = BuildConfig.BASE_URL
 
-    fun getApiService(token: String): ApiService {
+    fun getApiService(userPreference: UserPreference): ApiService {
         val authInterceptor = Interceptor { chain ->
-            val newRequest = chain.request().newBuilder()
-                .addHeader("Authorization", "Bearer $token")
+            val req = chain.request()
+            val user = runBlocking {
+                userPreference.getSession().first()
+            }
+            val requestHeaders = req.newBuilder()
+                .addHeader("Authorization", "Bearer ${user.token}")
                 .build()
-            chain.proceed(newRequest)
+            chain.proceed(requestHeaders)
         }
 
         val loggingInterceptor = if(BuildConfig.DEBUG) {
